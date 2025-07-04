@@ -1,0 +1,18 @@
+REATE PROCEDURE GetCustomerOrders
+    @CustomerID INT,
+    @MinTotalAmount DECIMAL(10,2)
+AS
+BEGIN
+    IF @MinTotalAmount > 0
+    BEGIN
+        SELECT OrderID, OrderDate, TotalAmount
+        FROM Orders
+        WHERE CustomerID = @CustomerID AND TotalAmount >= @MinTotalAmount;
+    END
+    ELSE
+    BEGIN
+        SELECT OrderID, OrderDate, TotalAmount
+        FROM Orders
+        WHERE CustomerID = @CustomerID;
+    END
+END;
