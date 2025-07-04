@@ -1,0 +1,31 @@
+CREATE FUNCTION dbo.GetCustomerStatus
+(
+    @TotalSpent DECIMAL(10,2)
+)
+RETURNS VARCHAR(20)
+AS
+BEGIN
+    DECLARE @Status VARCHAR(20);
+
+    IF @TotalSpent >= 1000
+        SET @Status = 'Platinum';
+    ELSE IF @TotalSpent >= 500
+        SET @Status = 'Gold';
+    ELSE
+        SET @Status = 'Standard';
+
+    RETURN @Status;
+END;
+
+Usage in a query:
+
+SELECT 
+    CustomerID,
+    CustomerName,
+    dbo.GetCustomerStatus(SUM(TotalAmount)) AS Status
+FROM 
+    Orders
+JOIN 
+    Customers ON Orders.CustomerID = Customers.CustomerID
+GROUP BY 
+    CustomerID, CustomerName;
